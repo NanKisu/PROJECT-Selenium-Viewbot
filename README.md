@@ -46,6 +46,17 @@ search_button.click()
 ```
 셀레니움은 애초에 웹서비스 테스트를 위해 만들어진 플랫폼이고, 브라우저를 실제 동작시키는 것과 다를 것이 없다. 다만 사람이 직접 동작을 수행히지않고 코드로 이를 대신한다. 그러므로 브라우저로 할 수 있는 모든 동작은 셀레니움으로 할 수 있다. ex) 클릭, 키 입력, 스크롤, js코드 실행, 쿠키 입력 등
 
+### 2-5) 
+``` py
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options  
+
+options = Options()
+options.headless = True
+browser = webdriver.Chrome(r'C:\Users\nankisu\Downloads\chromedriver_win32_78\chromedriver.exe', chrome_options=options)
+browser.get('http://seleniumhq.org/')
+```
+
 ## 3. AWS 등 클라우드 서버와의 조합 = 블로그 조회수 올리기
 ### 3-1) 개요
 대학생 시절 서포터즈 같은 대외 활동을 지원하려고 하면, 본인의 블로그 주소를 적는 란이 있는 경우가 있었다. 아마 서포터즈와 같은 대외 활동은 회사 홍보와 대외 이미지 제고를 위한 목적이므로, 더 파급효과가 있을 지원자를 거르는게 목적이라고 생각 한다. 하지만 일 평균 조회수가 0에 수렴하는 블로그를 가지고 있다면 이는 매우 난감한 상황이고, 필자 역시 그러했다.
