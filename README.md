@@ -107,3 +107,30 @@ browser.get('https://naver.com')
 print(browser.title)
 browser.close()
 ```
+
+### 3-3) 블로그 조회수 올리기
+``` py
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options  
+import time
+
+options = Options()
+options.headless = True
+while True:
+    browser = webdriver.Chrome('/home/ubuntu/chromedriver', options=options)
+    browser.get('${블로그 주소}')
+    print(browser.title)
+    browser.close()
+    time.sleep(60*10)
+```
+![조회수가 올라간 모습](https://i.ibb.co/h7n6231/image.png)
+
+이제 블로그에 주기적으로 접속하는 코드를 짜주면, 하나의 컴퓨터(AWS EC2)에서 브라우저(Selenium)으로 접속하는 것이므로 자연스럽게 조회수가 올라간다. 이를 막기 위해서는 Recaptcha와 같은 사람과 봇을 구분해주는 절차를 추가하거나, 특정 아이피에서 반복되는 수상한 접속을 찾아내는 알고리즘을 적용해야 한다.
+
+### 3-4) 여러 EC2 서버 동시에 관리하기
+하나의 EC2 서버로는 조회수를 올리는데 한계가 있다. 하나의 컴퓨터로 너무 잦은 접속을 하면 막는 알고리즘이 있는지 더이상 조회수가 올라가지 않는다. 그래서 높은 조회수를 올리고 싶으면 여러대의 EC2를 사용해야한다. 하지만 여러대의 서버를 돌리다보면 그만큼 관리가 힘들어진다. 블로그 주소나 접속 주기를 바꾸고 싶은 경우, 지금과 같은 방식으로는 각각 서버에 접속해서 실행 코드를 바꾸어 주어야 한다.
+
+이를 해결하기위해서 API서버를 하나 만들고 나머지 서버에서 URI와 접속 주기를 받아서 쓰는 구조를 생각해 보았다. 그리고 정보의 수정은 API 서버에서만 이루어 진다. 그림으로 표현하면 다음과 같다.
+
+![서비스 구조](https://i.ibb.co/4PK7kwK/image.png)
+
