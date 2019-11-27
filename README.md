@@ -136,3 +136,22 @@ while True:
 
 ![서비스 구조](https://i.ibb.co/4PK7kwK/image.png)
 
+``` java
+@RestController
+public class HomeController {
+	@Autowired ServletContext servletContext;
+	
+	@RequestMapping(value = "/target", method = RequestMethod.GET)
+	public String getTarget() {
+		return (String)servletContext.getAttribute("target");
+	}
+	
+	@RequestMapping(value = "/target", method = RequestMethod.POST)
+	public String postTarget(@RequestBody JsonNode target) {
+		servletContext.setAttribute("target", target.get("target").toString());
+		return (String)servletContext.getAttribute("target");
+	}
+}
+
+```
+API 서버는 Spring을 사용하여 간단하게 구현해 보았다. 사용자가 /target에 POST메소드로 목표 url을 입력하고, EC2 Selenium 봇들이 /target에 Get메소드로 목표 url을 입력받는다. 
