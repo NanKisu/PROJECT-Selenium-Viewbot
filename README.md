@@ -5,8 +5,7 @@
 
 ## 2. 셀레니움 실습
 ### 2-1) 실습 사전 준비
-셀레니움은 Java로 만들어 졌지만 java뿐 아니라 python, ruby등 다양한 언어로 사용할 수 있다. 본 실습에서는 빠른 진행을 위해 python을 사용하겠다.
-https://www.anaconda.com/distribution/#download-section 에서 파이썬을 설치하면 파이썬 뿐 아니라, 자주 사용하는 다양한 패키지 까지 함께 설치된다. 파이썬 설치가 끝나면 pip install selenium 명령어를 실행하여 selenium 파이썬 패키지를 설치해준다.
+셀레니움은 Java로 만들어 졌지만 java뿐 아니라 python, ruby등 다양한 언어로 사용할 수 있다. 본 실습에서는 빠른 진행을 위해 python을 사용하겠다. https://www.anaconda.com/distribution/#download-section 에서 파이썬을 설치하면 파이썬 뿐 아니라, 자주 사용하는 다양한 패키지 까지 함께 설치된다. 파이썬 설치가 끝나면 pip install selenium 명령어를 실행하여 selenium 파이썬 패키지를 설치해준다.
 
 셀레니움을 브라우저를 동작시키는 플랫폼이므로 동작시킬 브라우저 드라이버를 다운받아야 한다. 본 실습에서는 크롬 브라우저를 사용하겠다. https://chromedriver.chromium.org/downloads 에서 크롬 드라이버를 다운받는다.
 
@@ -15,7 +14,7 @@ https://www.anaconda.com/distribution/#download-section 에서 파이썬을 설�
 from selenium import webdriver
 browser = webdriver.Chrome(r'C:\Users\nankisu\Downloads\chromedriver_win32_78\chromedriver.exe')
 browser.get('http://navar.com')
-browser.close()
+browser.quit()
 ```
 셀레니움으로 크롬을 동작시키기 위해 아까 설치한 크롬 드라이버의 파일 경로를 넘겨준다. 정상적으로 크롬 브라우저가 실행되고 네이버로 접속되는 것을 확인한다.
 
@@ -26,11 +25,9 @@ from bs4 import BeautifulSoup
 
 browser = webdriver.Chrome(r'C:\Users\nankisu\Downloads\chromedriver_win32_78\chromedriver.exe')
 browser.get('http://naver.com')
-soup = BeautifulSoup(browser.page_source, 'lxml')
-keywords = soup.select(".PM_CL_realtimeKeyword_list_base .ah_k")
-for keword in keywords:
-    print(keword.text)
-browser.close()
+news_header = soup.select("#NM_NEWSSTAND_HEADER .list_issue")[0]
+print(news_header.text)
+browser.quit()
 ```
 셀레니움으로 동작시킨 브라우저의 html 소스를 BeautifulSoup에 넘겨주고 원하는 정보를 얻어낸다. 단순히 get request를 사용한 크롤링과는 다르게, 셀레니움을 사용하면 채팅과 같은 동적인 내용도 크롤링 할 수 있다. 
 
@@ -45,7 +42,7 @@ search_button = browser.find_element_by_css_selector('#search_btn')
 search_input.clear()
 search_input.send_keys("삼성SDS")
 search_button.click()
-browser.close()
+browser.quit()
 ```
 셀레니움은 애초에 웹서비스 테스트를 위해 만들어진 플랫폼이고, 브라우저를 실제 동작시키는 것과 다를 것이 없다. 다만 사람이 직접 동작을 수행히지않고 코드로 이를 대신한다. 그러므로 브라우저로 할 수 있는 모든 동작은 셀레니움으로 할 수 있다. ex) 클릭, 키 입력, 스크롤, js코드 실행, 쿠키 입력 등
 
@@ -65,11 +62,9 @@ browser.close()
 ```
 셀레니움으로 브라우저를 자동화 시키고 나면 한가지 드는 생각이 있다. "어차피 내가 클릭하고 입력하는 것도 아닌데, 화면이 없어도 되지 않을까?". GUI는 사람에게는 편리하지만, 컴퓨터에게는 자원을 소모하는 행위일 뿐이다. 따라서 코드가 제대로 동작하는 것을 확인했다면, headless 옵션으로 GUI 없이 실행시키는 것이 좋다.
 
-## 3. AWS 등 클라우드 서버와의 조합 = 블로그 조회수 올리기
+## 3. AWS 등 클라우드 서버와의 조합 = 트위치 
 ### 3-1) 개요
-대학생 시절 서포터즈 같은 대외 활동을 지원하려고 하면, 본인의 블로그 주소를 적는 란이 있는 경우가 있었다. 아마 서포터즈와 같은 대외 활동은 회사 홍보와 대외 이미지 제고를 위한 목적이므로, 더 파급효과가 있을 지원자를 거르는게 목적이라고 생각 한다. 하지만 일 평균 조회수가 0에 수렴하는 블로그를 가지고 있다면 이는 매우 난감한 상황이고, 필자 역시 그러했다.
-
-그래서 생각해낸 해결책이 selenium과 aws ec2의 조합이었다. selenium은 사실상 사람이 웹 브라우저를 동작시키는 것과 다르지 않고, aws ec2는 사실상 하나의 컴퓨터와 다르지 않다. 그러므로 ec2 서버에서 selenium으로 자신의 블로그에 접속하게 한다면 당연히 조회수가 올라간다.
+selenium은 사실상 사람이 웹 브라우저를 동작시키는 것과 다르지 않고, aws ec2는 사실상 하나의 컴퓨터와 다르지 않다. 그러므로 ec2 서버에서 selenium으로 자신의 트위치에 접속하게 한다면 당연히 시청자수가 올라갈 것이다. 그래서 이를 한번 검증해보고자 트위치 뷰봇을 만들어 보고자 한다.
  
 ### 3-2) AWS EC2 환경 세팅
 AWS EC2, Ubuntu Server 18.04로 서버를 하나 생성하였고 서버의 환경세팅은 위에서 했던것과 다르지 않다. 윈도우에서 하던것을 우분투 서버에서 하는 것 뿐다.
@@ -85,7 +80,7 @@ sudo apt-get install google-chrome-stable
 그 다음으로 크롬 드라이버를 다운받는다.
 ```
 sudo apt install unzip
-wget https://chromedriver.storage.googleapis.com/78.0.3904.70/chromedriver_linux64.zip
+wget https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_linux64.zip
 unzip chromedriver_linux64.zip
 ```
 
@@ -104,54 +99,11 @@ from selenium.webdriver.chrome.options import Options
 
 options = Options()
 options.headless = True
-browser = webdriver.Chrome('/home/ubuntu/chromedriver', options=options)
-browser.get('https://naver.com')
+browser = webdriver.Chrome(r'./chromedriver.exe', options=options)
+browser.get('https://www.twitch.tv/{아이디}')
 print(browser.title)
-browser.close()
 ```
 
-### 3-3) 블로그 조회수 올리기
-``` py
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options  
-import time
+![조회수가 올라간 모습](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FYFYOw%2FbtqESh3cgxs%2F8QxFr6Tv4gPG9pt7Jb6Bfk%2Fimg.png)
 
-options = Options()
-options.headless = True
-while True:
-    browser = webdriver.Chrome('/home/ubuntu/chromedriver', options=options)
-    browser.get('${블로그 주소}')
-    print(browser.title)
-    browser.close()
-    time.sleep(60*10)
-```
-![조회수가 올라간 모습](https://i.ibb.co/h7n6231/image.png)
-
-이제 블로그에 주기적으로 접속하는 코드를 짜주면, 하나의 컴퓨터(AWS EC2)에서 브라우저(Selenium)으로 접속하는 것이므로 자연스럽게 조회수가 올라간다. 이를 막기 위해서는 Recaptcha와 같은 사람과 봇을 구분해주는 절차를 추가하거나, 특정 아이피에서 반복되는 수상한 접속을 찾아내는 알고리즘을 적용해야 한다.
-
-### 3-4) 여러 EC2 서버 동시에 관리하기
-하나의 EC2 서버로는 조회수를 올리는데 한계가 있다. 하나의 컴퓨터로 너무 잦은 접속을 하면 막는 알고리즘이 있는지 더이상 조회수가 올라가지 않는다. 그래서 높은 조회수를 올리고 싶으면 여러대의 EC2를 사용해야한다. 하지만 여러대의 서버를 돌리다보면 그만큼 관리가 힘들어진다. 블로그 주소나 접속 주기를 바꾸고 싶은 경우, 지금과 같은 방식으로는 각각 서버에 접속해서 실행 코드를 바꾸어 주어야 한다.
-
-이를 해결하기위해서 API서버를 하나 만들고 나머지 서버에서 URI와 접속 주기를 받아서 쓰는 구조를 생각해 보았다. 정보의 수정은 API 서버에서만 이루어 진다. 그림으로 표현하면 다음과 같다.
-
-![서비스 구조](https://i.ibb.co/4PK7kwK/image.png)
-
-``` java
-@RestController
-public class HomeController {
-	@Autowired ServletContext servletContext;
-	
-	@RequestMapping(value = "/target", method = RequestMethod.GET)
-	public String getTarget() {
-		return (String)servletContext.getAttribute("target");
-	}
-	
-	@RequestMapping(value = "/target", method = RequestMethod.POST)
-	public String postTarget(@RequestBody JsonNode target) {
-		servletContext.setAttribute("target", target.get("target").toString());
-		return (String)servletContext.getAttribute("target");
-	}
-}
-
-```
-API 서버는 Spring을 사용하여 간단하게 구현해 보았다. 사용자가 /target에 POST메소드로 목표 url을 입력하고, EC2 Selenium 봇들이 /target에 Get메소드로 목표 url을 입력받는다. 
+5개의 AWS ec2 서버로 위의 코드를 실행하자, 실제로 시청자 수가 5명이 증가한것을 확인할 수 있다. 이처럼 selenium과 AWS ec2의 조합으로 트위치 뷰봇을 만들어 보았다. 이론적으로 가능하다는 것이 확인되었지만, 이를 악용하고자 한다면 배보다 배꼽이 더 클것이다. 각각 ec2 서버의 유지비가 만만치 않을 것이고, 비용을 들여서 해도 적발될 가능성이 크다. 따라서 이 글을 단순한 학술적 호기심과 검증 정도의 의미로 보았으면 한다.
